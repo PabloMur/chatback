@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { firestoreDB, realtimeDB } from "../../lib/firestoreConn";
 import admin from "firebase-admin";
 import jwt from "jsonwebtoken";
+import { nanoid } from "nanoid";
 
 type Data = {
   roomId?: string;
@@ -29,9 +30,15 @@ export default async function handler(
       };
 
       // Crear la chatroom en Firebase Realtime Database
-      const newRoomRef = realtimeDB.ref("test");
-      await newRoomRef.set("etst");
-      const roomId = newRoomRef.key?.slice(-4); // Obtener los últimos 4 dígitos del key
+      const id = nanoid();
+      const ref = realtimeDB.ref(`rooms/${id}`);
+      await ref.set({
+        key1: "valor1",
+        key2: "valor2",
+      });
+
+      // Obtener los últimos 4 dígitos del key
+      const roomId = ref.key?.slice(-4);
 
       if (!roomId) {
         res.status(500).json({ error: "Failed to create room" });
@@ -40,7 +47,7 @@ export default async function handler(
 
       // Guardar la información de la chatroom en Firestore
       await firestoreDB.collection("rooms").doc(roomId).set({
-        roomId: newRoomRef.key, // Guardar el key completo como campo roomId
+        roomId: ref.key, // Guardar el key completo como campo roomId
         createdBy: decodedToken.email,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
