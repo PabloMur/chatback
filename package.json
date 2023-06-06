@@ -8,11 +8,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/firebase": "^3.2.1",
+    "bcrypt": "^5.1.0",
+    "firebase": "^9.22.1",
+    "firebase-admin": "^11.9.0",
+    "nanoid": "^4.0.2",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
     "eslint": "8.42.0",
