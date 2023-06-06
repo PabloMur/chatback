@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { realtimeDB } from "../../lib/firestoreConn";
+import { nanoid } from "nanoid";
 
 type Data = {
   name: string;
@@ -15,7 +16,8 @@ export default async function handler(
   // Escribir datos en un nodo específico
   const writeData = async () => {
     try {
-      const ref = db.ref("rooms/fourth");
+      const id = nanoid();
+      const ref = db.ref(`rooms/${id}`);
       await ref.set({
         key1: "valor1",
         key2: "valor2",
