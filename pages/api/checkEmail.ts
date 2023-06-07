@@ -1,11 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { send } from "micro";
+import NextCors from "nextjs-cors";
 import { firestoreDB } from "../../lib/firestoreConn";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "POST") {
+  try {
+    await NextCors(req, res, {
+      // Options
+      methods: ["POST"],
+      origin: "*",
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    });
+
+    if (req.method !== "POST") {
+      throw new Error("Method Not Allowed");
+    }
     const { email } = req.body;
 
     // Buscar el documento en la colección "auth" con el correo electrónico dado
@@ -16,8 +28,9 @@ export default async function handler(
 
     const exists = !querySnapshot.empty;
 
-    res.status(200).json({ exists });
-  } else {
-    res.status(405).json({ error: "Method Not Allowed" });
+    return send(res, 200, { exists });
+  } catch (error) {
+    console.error(error);
+    return send(res, 400, { exists: false });
   }
 }
