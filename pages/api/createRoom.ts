@@ -9,6 +9,17 @@ type Data = {
   error?: string;
 };
 
+type Message = {
+  from: "owner" | "guest";
+  message: string;
+};
+
+type ChatroomData = {
+  createdBy: string;
+  guest: null | string;
+  messages: Message[];
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -25,16 +36,15 @@ export default async function handler(
     try {
       // Verificar y decodificar el token
       const secret = process.env.SECRET_KEY as any;
-      const decodedToken = jwt.verify(token, secret) as {
-        email: string;
-      };
+      const decodedToken = jwt.verify(token, secret) as { email: string };
 
       // Crear la chatroom en Firebase Realtime Database
       const id = nanoid();
       const ref = realtimeDB.ref(`rooms/${id}`);
       await ref.set({
-        key1: "valor1",
-        key2: "valor2",
+        createdBy: decodedToken.email,
+        guest: null,
+        messages: [],
       });
 
       // Obtener los últimos 4 dígitos del key
