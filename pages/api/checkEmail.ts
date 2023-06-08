@@ -15,9 +15,8 @@ export default async function handler(
       optionsSuccessStatus: 200,
     });
 
-    if (req.method !== "POST") {
-      throw new Error("Method Not Allowed");
-    }
+    if (req.method !== "POST") throw new Error("Method Not Allowed");
+
     const { email } = req.body;
 
     // Buscar el documento en la colección "auth" con el correo electrónico dado

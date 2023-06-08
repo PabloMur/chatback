@@ -1,20 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import NextCors from "nextjs-cors";
 import { firestoreDB } from "../../lib/firestoreConn";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-type Data = {
-  token?: string;
-  error?: string;
-};
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
-  if (req.method === "POST") {
+  try {
+    await NextCors(req, res, {
+      methods: ["POST"],
+      origin: "*",
+      optionsSuccessStatus: 200,
+    });
+
+    if (req.method !== "POST") throw new Error("Method Not Allowed");
+
     const { email, password } = req.body;
     const secret = process.env.SECRET_KEY as any;
+
     // Buscar el documento en la colección "auth" con el correo electrónico dado
     const querySnapshot = await firestoreDB
       .collection("auth")
@@ -41,7 +46,8 @@ export default async function handler(
     const token = jwt.sign({ email }, secret);
 
     res.status(200).json({ token });
-  } else {
+  } catch (error) {
+    console.error(error);
     res.status(405).json({ error: "Method Not Allowed" });
   }
 }
