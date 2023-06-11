@@ -3,6 +3,7 @@ import { firestoreDB, realtimeDB } from "../../lib/firestoreConn";
 import admin from "firebase-admin";
 import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
+import NextCors from "nextjs-cors";
 
 type Data = {
   roomId?: string;
@@ -48,7 +49,7 @@ export default async function handler(
       });
 
       // Obtener los últimos 4 dígitos del key
-      const roomId = ref.key?.slice(-4);
+      const roomId = ref.key?.slice(-4)?.toUpperCase();
 
       if (!roomId) {
         res.status(500).json({ error: "Failed to create room" });
