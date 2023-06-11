@@ -1,9 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { firestoreDB, realtimeDB } from "../../lib/firestoreConn";
 import admin from "firebase-admin";
 import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
 import NextCors from "nextjs-cors";
+import { generarNumeroAleatorio } from "../../lib/tools";
 
 type Data = {
   roomId?: string;
@@ -25,6 +26,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  await NextCors(req, res, {
+    // Configura los orígenes permitidos de tu API aquí
+    origin: "*",
+    methods: ["POST"],
+    optionsSuccessStatus: 200,
+  });
+
   if (req.method === "POST") {
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
@@ -44,12 +52,12 @@ export default async function handler(
       const ref = realtimeDB.ref(`rooms/${id}`);
       await ref.set({
         createdBy: decodedToken.email,
-        guest: null,
-        messages: [],
+        guest: "",
+        messages: [{}],
       });
 
       // Obtener los últimos 4 dígitos del key
-      const roomId = ref.key?.slice(-4)?.toUpperCase();
+      const roomId = generarNumeroAleatorio().toString();
 
       if (!roomId) {
         res.status(500).json({ error: "Failed to create room" });
