@@ -50,11 +50,12 @@ export default async function handler(
       // Crear la chatroom en Firebase Realtime Database
       const id = nanoid();
       const ref = realtimeDB.ref(`rooms/${id}`);
-      await ref.set({
+      const initialData: ChatroomData = {
         createdBy: decodedToken.email,
         guest: "",
-        messages: [{}],
-      });
+        messages: [],
+      };
+      await ref.set(initialData);
 
       // Obtener los últimos 4 dígitos del key
       const roomId = generarNumeroAleatorio().toString();
