@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { firestoreDB } from "../../lib/firestoreConn";
+import NextCors from "nextjs-cors";
 
 type Data = {
   roomId?: string;
@@ -10,6 +11,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  await NextCors(req, res, {
+    // Configura los orígenes permitidos de tu API aquí
+    origin: "*",
+    methods: ["POST"],
+    optionsSuccessStatus: 200,
+  });
   if (req.method === "POST") {
     const { roomId } = req.body;
 
