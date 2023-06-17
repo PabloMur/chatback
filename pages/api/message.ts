@@ -23,7 +23,7 @@ export default async function handler(
   });
 
   if (req.method === "PUT") {
-    const { roomId, message } = req.body;
+    const { roomId, message, from } = req.body;
 
     try {
       // Obtener la referencia a la chatroom en Realtime Database
@@ -35,7 +35,7 @@ export default async function handler(
 
       // Crear el nuevo mensaje con guest en null por ahora
       const newMessage: Message = {
-        from: "owner",
+        from,
         message,
       };
 
