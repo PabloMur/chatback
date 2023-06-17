@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { realtimeDB } from "../../lib/firestoreConn";
+import NextCors from "nextjs-cors";
 
 type Data = {
   success: boolean;
@@ -15,6 +16,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  await NextCors(req, res, {
+    methods: ["PUT"],
+    origin: "*",
+    optionsSuccessStatus: 200,
+  });
+
   if (req.method === "PUT") {
     const { roomId, message } = req.body;
 
