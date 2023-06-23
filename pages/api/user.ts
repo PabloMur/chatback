@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { firestoreDB } from "../../lib/firestoreConn";
 import bcrypt from "bcrypt";
+import NextCors from "nextjs-cors";
 
 type User = {
   name: string;
@@ -17,6 +18,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<User | ErrorResponse>
 ) {
+  await NextCors(req, res, {
+    methods: ["PUT"],
+    origin: "*",
+    optionsSuccessStatus: 200,
+  });
   if (req.method === "POST") {
     try {
       const { name, email, password, hasCreatedRoom } = req.body;
