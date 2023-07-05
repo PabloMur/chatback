@@ -6,15 +6,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await NextCors(req, res, {
-    // Options
-    methods: ["POST"],
-    origin: "*",
-    optionsSuccessStatus: 200,
-  });
-  if (req.method === "POST") {
-    CheckEmailController.checkEmail(req, res);
-  } else {
-    res.status(405).json({ error: "Method Not Allowed" });
+  try {
+    await NextCors(req, res, {
+      methods: ["POST"],
+      origin: "*",
+      optionsSuccessStatus: 200,
+    });
+    if (req.method === "POST") {
+      CheckEmailController.checkEmail(req, res);
+    } else {
+      res.status(405).json({ error: "Method Not Allowed" });
+    }
+  } catch (error) {
+    console.error(error);
   }
 }
