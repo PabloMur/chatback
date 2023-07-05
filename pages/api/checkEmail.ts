@@ -7,12 +7,12 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    await NextCors(req, res, {
-      methods: ["POST"],
-      origin: "*",
-      optionsSuccessStatus: 200,
-    });
     if (req.method === "POST") {
+      await NextCors(req, res, {
+        methods: ["POST"],
+        origin: "*",
+        optionsSuccessStatus: 200,
+      });
       CheckEmailController.checkEmail(req, res);
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
