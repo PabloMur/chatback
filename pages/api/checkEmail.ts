@@ -1,7 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import CheckEmailController from "../../controllers/checkEmailController";
+import NextCors from "nextjs-cors";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  await NextCors(req, res, {
+    // Options
+    methods: ["POST"],
+    origin: "*",
+    optionsSuccessStatus: 200,
+  });
   if (req.method === "POST") {
     CheckEmailController.checkEmail(req, res);
   } else {
