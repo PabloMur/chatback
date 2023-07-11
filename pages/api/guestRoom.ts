@@ -8,12 +8,12 @@ export default async function handler(
 ) {
   try {
     await NextCors(req, res, {
-      methods: ["PUT"],
+      methods: ["POST"],
       origin: "*",
       optionsSuccessStatus: 200,
     });
 
-    if (req.method === "PUT") {
+    if (req.method === "POST") {
       const { chatroomID, email } = req.body;
       const ref = realtimeDB.ref(`rooms/${chatroomID}`);
       await ref.update({

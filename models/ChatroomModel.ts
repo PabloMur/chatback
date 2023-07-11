@@ -31,6 +31,7 @@ class CreateChatroomModel {
       // Guardar la información de la chatroom en Firestore
       await firestoreDB.collection("rooms").doc(roomId).set({
         roomId: ref.key, // Guardar el key completo como campo roomId
+        guest: "",
         createdBy: decodedToken.email,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
