@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { realtimeDB } from "../../lib/firestoreConn";
+import { firestoreDB, realtimeDB } from "../../lib/firestoreConn";
 import NextCors from "nextjs-cors";
 
 export default async function handler(
@@ -14,11 +14,14 @@ export default async function handler(
     });
 
     if (req.method === "POST") {
-      const { chatroomID, email } = req.body;
+      const { chatroomID, email, roomId } = req.body;
       const ref = realtimeDB.ref(`rooms/${chatroomID}`);
+      const firestoreRef = firestoreDB.collection("rooms").doc(roomId);
+      const prevData = firestoreRef.get();
       await ref.update({
         guest: email,
       });
+      await firestoreRef.update({ ...prevData, guest: email });
       res.send({ ok: true });
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
