@@ -24,11 +24,10 @@ export default async function handler(
     try {
       const querySnapshot = await firestoreDB
         .collection("rooms")
-        .where("createdBy", "==", email)
+        .where("guest", "==", email)
         .get();
 
       const roomIds = querySnapshot.docs.map((doc) => doc.id);
-
       res.status(200).json({ roomIds });
     } catch (error) {
       res.status(500).json({ error: "Error al buscar las chatrooms" });
