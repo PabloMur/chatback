@@ -21,6 +21,7 @@ export default async function handler(
     const { roomId } = req.body;
 
     try {
+      console.log(roomId);
       const snapshotRef = firestoreDB.collection("rooms").doc(roomId);
       const snapshot = await snapshotRef.get();
       let data = snapshot.data();
