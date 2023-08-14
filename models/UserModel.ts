@@ -1,3 +1,4 @@
+import { firestoreDB } from "../lib/firestoreConn";
 class UserModel {
   private email: string;
   private name: string;
@@ -32,6 +33,24 @@ class UserModel {
 
   setProfileImageUrl(profileImageUrl: string) {
     this.profileImageUrl = profileImageUrl;
+  }
+  static async getMe(email: string) {
+    try {
+      const querySnapshot = await firestoreDB
+        .collection("users")
+        .where("email", "==", email)
+        .get();
+
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
+        return userData; // Retorna la información completa del usuario
+      } else {
+        return null; // Retorna null si el usuario no existe
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+      return null; // Retorna null en caso de error
+    }
   }
 }
 
