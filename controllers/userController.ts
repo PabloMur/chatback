@@ -2,9 +2,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { UserModel } from "../models/UserModel";
 import jwt from "jsonwebtoken";
 import { error } from "console";
+import NextCors from "nextjs-cors";
 
 class userController {
   static async getUserData(req: NextApiRequest, res: NextApiResponse) {
+    await NextCors(req, res, {
+      methods: ["POST"],
+      origin: "*",
+      optionsSuccessStatus: 200,
+    });
     const { authorization } = req.headers;
     const { email } = req.body;
     const token = authorization?.replace("Bearer ", "");
