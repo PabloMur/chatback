@@ -52,6 +52,27 @@ class UserModel {
       return null;
     }
   }
+  static async updateMe(email: string, data: any) {
+    try {
+      const querySnapshot = await firestoreDB
+        .collection("users")
+        .where("email", "==", email)
+        .get();
+
+      if (!querySnapshot.empty) {
+        const userRef = querySnapshot.docs[0].ref;
+        const currentUserData = (await userRef.get()).data();
+        const updatedData = { ...currentUserData, ...data };
+        await userRef.update(updatedData);
+        return updatedData;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error("Error updating user data:", error);
+      return null;
+    }
+  }
 }
 
 export { UserModel };

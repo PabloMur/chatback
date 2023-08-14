@@ -8,13 +8,13 @@ export default async function handler(
 ) {
   try {
     await NextCors(req, res, {
-      methods: ["POST"],
+      methods: ["PUT"],
       origin: "*",
       optionsSuccessStatus: 200,
     });
-    if (req.method === "POST") {
-      const userData = await UserController.getUserData(req, res);
-      res.status(200).json({ userData });
+    if (req.method === "PUT") {
+      const updateResponse = await UserController.updateUserData(req, res);
+      res.status(200).json({ userUpdated: updateResponse });
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }
