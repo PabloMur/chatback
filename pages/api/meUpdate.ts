@@ -13,8 +13,7 @@ export default async function handler(
       optionsSuccessStatus: 200,
     });
     if (req.method === "PUT") {
-      const updateResponse = await UserController.updateUserData(req, res);
-      res.status(200).json({ userUpdated: updateResponse });
+      await UserController.updateUserData(req, res);
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }

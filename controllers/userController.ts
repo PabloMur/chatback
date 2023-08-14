@@ -29,7 +29,7 @@ class UserController {
   static async updateUserData(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { authorization } = req.headers;
-      const { newData } = req.body;
+      const { newData, email } = req.body;
 
       if (!authorization) {
         return res.status(401).json({ error: "Missing authorization token" });
@@ -39,12 +39,11 @@ class UserController {
       const secret = process.env.SECRET_KEY as string;
       const decodedToken = jwt.verify(token, secret) as any;
 
-      if (decodedToken.email) {
+      if (decodedToken.email !== email) {
         return res.status(401).json({ error: "Invalid email in token" });
       }
-
-      const userData = await UserModel.updateMe(decodedToken.email, newData);
-      return res.status(200).json(userData);
+      await UserModel.updateMe(decodedToken.email, newData);
+      return res.status(200).json({ userUpdated: true });
     } catch (error) {
       return res.status(500).json({ error: "An error occurred" });
     }
