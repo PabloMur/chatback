@@ -16,6 +16,7 @@ class userController {
       const secret = process.env.SECRET_KEY as any;
       const decodedToken = jwt.verify(token, secret) as { email: string };
       const userData = await UserModel.getMe(decodedToken.email);
+      res.status(200).json({ userData });
       return userData;
     } catch (error) {
       res.status(401).json({ error: error });
