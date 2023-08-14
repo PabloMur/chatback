@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { UserModel } from "../models/UserModel";
 import jwt from "jsonwebtoken";
 import { error } from "console";
-//import NextCors from "nextjs-cors";
 
 class userController {
   static async getUserData(req: NextApiRequest, res: NextApiResponse) {
