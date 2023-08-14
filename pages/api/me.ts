@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import NextCors from "nextjs-cors";
-//import userController from "../../controllers/userController";
+import userController from "../../controllers/userController";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,8 +13,8 @@ export default async function handler(
       optionsSuccessStatus: 200,
     });
     if (req.method === "POST") {
-      //const userData = await userController.getUserData(req, res);
-      res.status(200).json({ test: "TEST" });
+      const userData = await userController.getUserData(req, res);
+      res.status(200).json({ test: userData });
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }
