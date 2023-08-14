@@ -5,7 +5,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
+    res.send({ ok: true });
+  } else if (req.method === "POST") {
     await NextCors(req, res, {
       methods: ["POST"],
       origin: "*",
