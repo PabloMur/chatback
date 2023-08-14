@@ -7,11 +7,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    await NextCors(req, res, {
-      methods: ["POST"],
-      origin: "*",
-      optionsSuccessStatus: 200,
-    });
     if (req.method === "POST") {
       const userData = await userController.getUserData(req, res);
       res.status(200).json({ userData });
