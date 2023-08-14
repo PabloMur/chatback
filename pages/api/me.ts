@@ -6,14 +6,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "GET") {
+  if (req.method === "POST") {
     await NextCors(req, res, {
-      methods: ["GET"],
+      methods: ["POST"],
       origin: "*",
       optionsSuccessStatus: 200,
     });
     const userData = await userController.getUserData(req, res);
-    res.status(200).json({ userData });
+    res.status(200).json({ test: userData });
   } else {
     res.status(405).json({ error: "Method Not Allowed" });
   }

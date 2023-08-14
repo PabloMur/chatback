@@ -43,13 +43,13 @@ class UserModel {
 
       if (!querySnapshot.empty) {
         const userData = querySnapshot.docs[0].data();
-        return userData; // Retorna la información completa del usuario
+        return userData;
       } else {
-        return null; // Retorna null si el usuario no existe
+        return null;
       }
     } catch (error) {
       console.error("Error checking email:", error);
-      return null; // Retorna null en caso de error
+      return null;
     }
   }
 }
