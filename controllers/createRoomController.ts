@@ -7,7 +7,6 @@ class CreateChatroomController {
   static async createChatroom(req: NextApiRequest, res: NextApiResponse) {
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
-
     if (!token) {
       res.status(401).json({ error: "Missing authorization token" });
       return;
@@ -15,7 +14,7 @@ class CreateChatroomController {
 
     try {
       const roomId = await CreateChatroomModel.createChatroom(token);
-      res.status(200).json({ roomId });
+      return roomId;
     } catch (error) {
       res.status(401).json({ error: error });
     }
@@ -24,8 +23,8 @@ class CreateChatroomController {
   static async deleteRoom(req: NextApiRequest, res: NextApiResponse) {
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
-    const secret = process.env.SECRET as any;
     const { roomId } = req.query as any;
+    const secret = process.env.SECRET_KEY as any;
 
     if (!token) {
       res.status(401).json({ error: "Missing authorization token" });
@@ -35,8 +34,10 @@ class CreateChatroomController {
     try {
       const decodedToken = jwt.verify(token, secret);
       if (decodedToken) {
-        const deletRoom = await ChatroomModel.deleteRoom(roomId);
-        return deletRoom;
+        const deletRoom = await ChatroomModel.deleteRoom(token, roomId);
+        return { decodedToken, deletRoom };
+      } else {
+        return null;
       }
     } catch (error) {
       res.status(401).json({ error: error });

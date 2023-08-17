@@ -16,8 +16,10 @@ export default async function handler(
     if (req.method === "DELETE") {
       const deletingUser = await UserController.deleteAccount(req, res);
       const deletingAuth = await AuthController.deleteAuth(req, res);
-      if (deletingUser && deletingAuth)
-        res.status(200).json({ deletingUser, deletingAuth });
+      if (deletingUser && deletingAuth) {
+        console.log(deletingAuth, deletingUser);
+        return res.status(200).json({ deletingUser, deletingAuth });
+      }
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }

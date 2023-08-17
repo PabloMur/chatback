@@ -12,7 +12,13 @@ export default async function handler(
     optionsSuccessStatus: 200,
   });
   if (req.method === "POST") {
-    CreateChatroomController.createChatroom(req, res);
+    const roomCreated = await CreateChatroomController.createChatroom(req, res);
+    if (roomCreated)
+      res.status(200).json({
+        roomCreated: {
+          roomId: roomCreated,
+        },
+      });
   } else {
     res.status(405).json({ error: "Method Not Allowed" });
   }
