@@ -48,6 +48,27 @@ class UserController {
       return res.status(500).json({ error: "An error occurred" });
     }
   }
+  static async deleteAccount(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const { authorization } = req.headers;
+      if (!authorization) {
+        return res.status(401).json({ error: "Missing authorization token" });
+      }
+
+      const token = authorization.replace("Bearer ", "");
+      const secret = process.env.SECRET_KEY as string;
+      const decodedToken = jwt.verify(token, secret) as any;
+
+      if (!decodedToken.email) {
+        return res.status(401).json({ error: "Invalid email in token" });
+      }
+
+      const userDeleted = await UserModel.deleteMe(decodedToken.email);
+      return userDeleted;
+    } catch (error) {
+      return res.status(500).json({ error: "An error occurred" });
+    }
+  }
 }
 
 export default UserController;

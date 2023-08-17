@@ -73,6 +73,25 @@ class UserModel {
       return null;
     }
   }
+  static async deleteMe(email: string) {
+    try {
+      const querySnapshot = await firestoreDB
+        .collection("users")
+        .where("email", "==", email)
+        .get();
+
+      if (!querySnapshot.empty) {
+        const userRef = querySnapshot.docs[0].ref;
+        await userRef.delete();
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return false;
+    }
+  }
 }
 
 export { UserModel };

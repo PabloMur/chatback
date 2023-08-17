@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import createRoomController from "../../controllers/createRoomController";
 import NextCors from "nextjs-cors";
-//Falta que tambien se elimine en la realtime
+import UserController from "../../controllers/userController";
+import AuthController from "../../controllers/authController";
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -13,8 +14,10 @@ export default async function handler(
       optionsSuccessStatus: 200,
     });
     if (req.method === "DELETE") {
-      const deleting = await createRoomController.deleteRoom(req, res);
-      res.status(400).json({ roomDeleted: deleting });
+      const deletingUser = await UserController.deleteAccount(req, res);
+      const deletingAuth = await AuthController.deleteAuth(req, res);
+      if (deletingUser && deletingAuth)
+        res.status(200).json({ deletingUser, deletingAuth });
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }

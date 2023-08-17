@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import CreateChatroomModel from "../models/ChatroomModel";
 import ChatroomModel from "../models/RoomModel";
+import jwt from "jsonwebtoken";
 
 class CreateChatroomController {
   static async createChatroom(req: NextApiRequest, res: NextApiResponse) {
@@ -23,6 +24,7 @@ class CreateChatroomController {
   static async deleteRoom(req: NextApiRequest, res: NextApiResponse) {
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
+    const secret = process.env.SECRET as any;
     const { roomId } = req.query as any;
 
     if (!token) {
@@ -31,8 +33,11 @@ class CreateChatroomController {
     }
 
     try {
-      const deletRoom = await ChatroomModel.deleteRoom(roomId);
-      return deletRoom;
+      const decodedToken = jwt.verify(token, secret);
+      if (decodedToken) {
+        const deletRoom = await ChatroomModel.deleteRoom(roomId);
+        return deletRoom;
+      }
     } catch (error) {
       res.status(401).json({ error: error });
     }
