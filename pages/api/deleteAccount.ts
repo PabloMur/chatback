@@ -17,7 +17,7 @@ export default async function handler(
       const deletingUser = await UserController.deleteAccount(req, res);
       const deletingAuth = await AuthController.deleteAuth(req, res);
       if (deletingUser && deletingAuth) {
-        console.log(deletingAuth, deletingUser);
+        //console.log(deletingAuth, deletingUser);
         return res.status(200).json({ deletingUser, deletingAuth });
       }
     } else {
