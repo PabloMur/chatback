@@ -31,6 +31,8 @@ class UserModel {
         const currentUserData = (await userRef.get()).data();
         if (data.userImage) {
           const parsedImage = await cloudinary.uploader.upload(data.userImage);
+          console.log(parsedImage.secure_url);
+
           data.userImage = parsedImage.secure_url;
         }
         const updatedData = { ...currentUserData, ...data };
