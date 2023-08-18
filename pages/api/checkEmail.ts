@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import CheckEmailController from "../../controllers/checkEmailController";
 import NextCors from "nextjs-cors";
+import UserController from "../../controllers/userController";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +13,8 @@ export default async function handler(
       optionsSuccessStatus: 200,
     });
     if (req.method === "POST") {
-      CheckEmailController.checkEmail(req, res);
+      const checkEmail = await UserController.checkEmail(req, res);
+      return res.status(200).json({ response: checkEmail });
     } else {
       res.status(405).json({ error: "Method Not Allowed" });
     }

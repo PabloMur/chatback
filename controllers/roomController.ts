@@ -3,7 +3,7 @@ import CreateChatroomModel from "../models/ChatroomModel";
 import ChatroomModel from "../models/RoomModel";
 import jwt from "jsonwebtoken";
 
-class CreateChatroomController {
+class roomController {
   static async createChatroom(req: NextApiRequest, res: NextApiResponse) {
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
@@ -34,7 +34,7 @@ class CreateChatroomController {
     try {
       const decodedToken = jwt.verify(token, secret);
       if (decodedToken) {
-        const deletRoom = await ChatroomModel.deleteRoom(token, roomId);
+        const deletRoom = await ChatroomModel.deleteRoom(roomId);
         return { decodedToken, deletRoom };
       } else {
         return null;
@@ -45,4 +45,4 @@ class CreateChatroomController {
   }
 }
 
-export default CreateChatroomController;
+export default roomController;

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import CreateChatroomController from "../../controllers/createRoomController";
+import roomController from "../../controllers/roomController";
 import NextCors from "nextjs-cors";
 
 export default async function handler(
@@ -12,7 +12,7 @@ export default async function handler(
     optionsSuccessStatus: 200,
   });
   if (req.method === "POST") {
-    const roomCreated = await CreateChatroomController.createChatroom(req, res);
+    const roomCreated = await roomController.createChatroom(req, res);
     if (roomCreated)
       res.status(200).json({
         roomCreated: {

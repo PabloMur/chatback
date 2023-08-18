@@ -69,6 +69,15 @@ class UserController {
       return res.status(500).json({ error: "An error occurred" });
     }
   }
+  static async checkEmail(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const { email } = req.body;
+      const emailCheck = await UserModel.checkEmail(email);
+      return emailCheck;
+    } catch (error) {
+      return res.status(500).json({ error: "An error occurred" });
+    }
+  }
 }
 
 export default UserController;

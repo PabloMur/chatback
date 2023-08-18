@@ -1,6 +1,6 @@
 import { firestoreDB } from "../lib/firestoreConn";
-class ChatroomModel {
-  static async deleteRoom(token: string, roomId: string) {
+class roomModel {
+  static async deleteRoom(roomId: string) {
     try {
       const docRef = await firestoreDB.collection("rooms").doc(roomId).delete();
       return docRef;
@@ -11,4 +11,4 @@ class ChatroomModel {
   }
 }
 
-export default ChatroomModel;
+export default roomModel;
