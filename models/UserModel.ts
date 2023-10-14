@@ -29,13 +29,6 @@ class UserModel {
       if (!querySnapshot.empty) {
         const userRef = querySnapshot.docs[0].ref;
         const currentUserData = (await userRef.get()).data();
-        if (data.userImage) {
-          const parsedImage = await cloudinary.uploader.upload(data.userImage);
-          console.log("tiene imagen para editar");
-          console.log(data.userImage);
-          data.userImage = parsedImage.secure_url;
-          console.log(data.userImage);
-        }
         const updatedData = { ...currentUserData, ...data };
         await userRef.update(updatedData);
         return updatedData;
