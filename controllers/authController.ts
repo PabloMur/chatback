@@ -6,6 +6,7 @@ class AuthController {
   static async createAuth(req: NextApiRequest, res: NextApiResponse) {
     const { email, password } = req.body;
     const created = await AuthModel.createAuth(email, password);
+    console.log("hola");
 
     if (created) {
       res.status(200).json({ authCreated: true });
